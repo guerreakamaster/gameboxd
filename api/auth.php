@@ -1,14 +1,7 @@
 <?php
 session_start(); 
 
-$host = "127.0.0.1";
-$user = "admin";
-$password = "admin";
-$database = "gameboxd";
-
-$conn = mysqli_connect($host, $user, $password, $database)
-or die('Error connecting database: '.mysqli_error($conn) );
-
+require_once __DIR__ . '/db.php';
 
 $action = $_POST['action'] ?? '';
 $username = $_POST['username'] ?? '';

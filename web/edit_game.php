@@ -7,11 +7,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     exit;
 }
 
-$host = "127.0.0.1";
-$user = "admin";
-$password = "admin"; 
-$database = "gameboxd";
-$conn = new mysqli($host, $user, $password, $database);
+require_once __DIR__ . '/../api/db.php';
 
 $type = $_GET['type'] ?? '';
 $id = $_GET['id'] ?? 0;

@@ -2,17 +2,8 @@
 // Tell the browser we are sending JSON data, NOT HTML
 header('Content-Type: application/json; charset=utf-8');
 
-$host = "127.0.0.1";
-$user = "admin";
-$password = "admin"; // Make sure your XAMPP password is correct here!
-$database = "gameboxd";
+require_once __DIR__ . '/db.php';
 
-$conn = new mysqli($host, $user, $password, $database);
-
-if ($conn->connect_error) {
-    echo json_encode(["error" => "Connection failed."]);
-    exit;
-}
 
 $sql = "SELECT * FROM games";
 $result = $conn->query($sql);

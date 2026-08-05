@@ -14,11 +14,7 @@ if(!isset($_GET['game_id'])) {
 }
 
 //connect to database
-$host = "127.0.0.1";
-$user = "admin";
-$password = "admin"; 
-$database = "gameboxd";
-$conn = new mysqli($host, $user, $password, $database);
+require_once __DIR__ . '/../api/db.php';
 
 //get game title from game_id
 $game_id = $_GET['game_id'];

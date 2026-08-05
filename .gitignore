@@ -1,2 +1,7 @@
 # Local-only database seed containing development credentials.
 sql/02_seed_users.sql
+
+# Local-only seed with real cover art (thumbnail URLs, not stable).
+sql/01_seed_posters.sql
+
+.env

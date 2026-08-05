@@ -11,10 +11,7 @@ if (!isset($_SESSION['user_id'])) {
     die("Unauthorized access.");
 }
 
-$host = "127.0.0.1";
-$user = "admin";
-$password = "admin";
-$database = "gameboxd";
+require_once __DIR__ . '/db.php';
 
 
 $conn = new mysqli($host, $user, $password, $database);
@@ -24,7 +21,7 @@ $type = $_GET['type'] ?? '';
 $id = $_GET['id'] ?? 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_POST['action']) && $_POST['action'] === 'add') {
-    
+
 
     $title = $_POST['title'];
     $release_year = $_POST['release_year'];
@@ -61,7 +58,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_PO
     $stmt = $conn->prepare("UPDATE games SET title=?, release_year=?, genre=?, developer=?, image_url=? WHERE id=?");
 
     $stmt->bind_param("sisssi", $title, $release_year, $genre, $developer, $image_url, $id);
-    
+
     try {
         $stmt->execute();
         header("Location: ../web/index.php?msg=game_updated");
@@ -74,10 +71,10 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_PO
     }
 }
 //delete actions
-else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_POST['action']) && $_POST['action'] === 'delete') { 
-    
+else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+
     $stmt = $conn->prepare("DELETE FROM games WHERE id = ?");
-    $stmt -> bind_param("i", $id);
+    $stmt->bind_param("i", $id);
 
     try {
         $stmt->execute();
@@ -95,8 +92,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_PO
 
 
 //ADD NEW REVIEW
-else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review' && isset($_POST['action']) && $_POST['action'] === 'add') { 
-    $user_id = $_SESSION['user_id'];
+else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review' && isset($_POST['action']) && $_POST['action'] === 'add') {
     $game_id = $_POST['game_id'] ?? '';
     $rating = $_POST['rating'] ?? '';
     $rating_text = $_POST['rating_text'] ?? '';

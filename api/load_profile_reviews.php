@@ -8,16 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$host = "127.0.0.1";
-$user = "admin";
-$password = "admin";
-$database = "gameboxd";
-
-$conn = new mysqli($host, $user, $password, $database);
-
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed."]));
-}
+require_once __DIR__ . '/db.php';
 
 $user_id = $_SESSION['user_id'];
 
