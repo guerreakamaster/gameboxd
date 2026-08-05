@@ -52,7 +52,7 @@ if ($type === 'game') {
                 <input type="text" name="title" required value="<?php echo htmlspecialchars($gameData['title']); ?>">
                 
                 <label>Release Year</label>
-                <input type="year" name="year" required value="<?php echo htmlspecialchars($gameData['year']); ?>">
+                <input type="number" name="release_year" required value="<?php echo htmlspecialchars($gameData['release_year']); ?>">
                 
                 <label>Genre</label>
                 <input type="text" name="genre" required value="<?php echo htmlspecialchars($gameData['genre']); ?>">

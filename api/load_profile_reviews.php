@@ -22,7 +22,7 @@ if ($conn->connect_error) {
 $user_id = $_SESSION['user_id'];
 
 // We grab reviews.id AS review_id so the edit button knows exactly which review to edit!
-$sql = "SELECT reviews.id AS review_id, games.id AS game_id, games.title, games.year, games.image_url, reviews.rating, reviews.rating_text, reviews.created_at, reviews.played_hours
+$sql = "SELECT reviews.id AS review_id, games.id AS game_id, games.title, games.release_year, games.image_url, reviews.rating, reviews.rating_text, reviews.created_at, reviews.played_hours
         FROM reviews 
         JOIN games ON reviews.game_id = games.id 
         WHERE reviews.user_id = ? 

@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         const filtered = games.filter(g =>
-            g.title.toLowerCase().includes(q) || String(g.year).includes(q)
+            g.title.toLowerCase().includes(q) || String(g.release_year).includes(q)
         );
 
         render(filtered);
