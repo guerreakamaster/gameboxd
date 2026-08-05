@@ -37,14 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_POST['a
     // "siiss" means: String, Integer, String, String, String
     $stmt->bind_param("sisss", $title, $release_year, $genre, $developer, $image_url);
 
-    if ($stmt->execute()) {
+    try {
+        $stmt->execute();
         header("Location: ../web/index.php?msg=game_added");
         exit;
-    } else {
-        $error = "Error adding game: " . $conn->error;
+    } catch (mysqli_sql_exception $e) {
+        // 1062 is the duplicate key error. The games table has a UNIQUE on
+        // (title, release_year), so this means the game is already in the catalogue.
+        $error = ($e->getCode() === 1062) ? 'duplicate' : 'save_failed';
+        header("Location: ../web/add_game.php?error=" . $error);
+        exit;
     }
-    $stmt->close();
-    $conn->close();
 }
 //update
 else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_POST['action']) && $_POST['action'] === 'update') {
@@ -59,11 +62,16 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_PO
 
     $stmt->bind_param("sisssi", $title, $release_year, $genre, $developer, $image_url, $id);
     
-    if ($stmt->execute()) {
+    try {
+        $stmt->execute();
         header("Location: ../web/index.php?msg=game_updated");
         exit;
+    } catch (mysqli_sql_exception $e) {
+        // Renaming a game onto a title and year that already exist hits the same UNIQUE.
+        $error = ($e->getCode() === 1062) ? 'duplicate' : 'save_failed';
+        header("Location: ../web/edit_game.php?type=game&id=" . (int) $id . "&error=" . $error);
+        exit;
     }
-    $stmt->close();
 }
 //delete actions
 else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_POST['action']) && $_POST['action'] === 'delete') { 
@@ -71,11 +79,14 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_PO
     $stmt = $conn->prepare("DELETE FROM games WHERE id = ?");
     $stmt -> bind_param("i", $id);
 
-    if ($stmt->execute()) {
+    try {
+        $stmt->execute();
         header("Location: ../web/index.php?msg=game_deleted");
         exit;
+    } catch (mysqli_sql_exception $e) {
+        header("Location: ../web/index.php?error=save_failed");
+        exit;
     }
-    $stmt->close();
 }
 
 //######################################################################
@@ -100,14 +111,14 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review' && isset($_
     $stmt = $conn->prepare("INSERT INTO reviews (user_id, game_id, rating, rating_text, played_hours) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("iiisi", $user_id, $game_id, $rating, $rating_text, $played_hours);
 
-    if ($stmt->execute()) {
+    try {
+        $stmt->execute();
         header("Location: ../web/index.php?msg=review_saved");
-    } else {
-        echo "Error saving review: " . $conn->error;
+        exit;
+    } catch (mysqli_sql_exception $e) {
+        header("Location: ../web/index.php?error=save_failed");
+        exit;
     }
-
-    $stmt->close();
-    $conn->close();
 }
 
 
@@ -121,11 +132,14 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review'&& isset($_P
     // "sisssi" = String, Int, String, String, String, Int (the ID)
     $stmt->bind_param("iisi", $rating, $played_hours, $rating_text, $id);
     
-    if ($stmt->execute()) {
+    try {
+        $stmt->execute();
         header("Location: ../web/profile.php?msg=review_updated");
         exit;
+    } catch (mysqli_sql_exception $e) {
+        header("Location: ../web/profile.php?error=save_failed");
+        exit;
     }
-    $stmt->close();
 }
 
 
@@ -134,9 +148,12 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review' && isset($_
     $stmt = $conn->prepare("DELETE FROM reviews WHERE id = ?");
     $stmt -> bind_param("i", $id);
 
-    if ($stmt->execute()) {
+    try {
+        $stmt->execute();
         header("Location: ../web/profile.php?msg=review_deleted");
         exit;
+    } catch (mysqli_sql_exception $e) {
+        header("Location: ../web/profile.php?error=save_failed");
+        exit;
     }
-    $stmt->close();
 }

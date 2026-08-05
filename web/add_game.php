@@ -28,23 +28,27 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
             <input type="hidden" name="action" value="add">
 
                 <label>Game Title</label>
-                <input type="text" name="title" required placeholder="e.g. Dark Souls 3">
+                <input type="text" name="title" required placeholder="Dark Souls 3">
                 
                 <label>Release Year</label>
-                <input type="year" name="year" required placeholder="e.g. 2016">
+                <input type="number" name="release_year" required placeholder="2016">
                 
                 <label>Genre</label>
-                <input type="text" name="genre" required placeholder="e.g. Souls-like">
+                <input type="text" name="genre" required placeholder="Souls-like">
 
                 <label>Developer</label>
-                <input type="text" name="developer" required placeholder="e.g. FromSoftware">
+                <input type="text" name="developer" required placeholder="FromSoftware">
 
                 <label>Cover Image URL</label>
-                <input type="text" name="image_url" required placeholder="e.g. www.images/darksouls3.jpg">
+                <input type="text" name="image_url" required placeholder="www.images/game_image.jpg">
                 
-                <button type="submit">Save to Database</button>
+                <button type="submit">Save to Database!</button>
             </form>
         </div>
     </div>
+
+    <!--Sweet alert 2 widget-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../api/admin.js"></script>
 </body>
 </html>

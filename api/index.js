@@ -96,6 +96,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         // Clean the URL so it doesn't trigger again on refresh
         window.history.replaceState(null, null, window.location.pathname);
+    }else if (error === 'save_failed') {
+        Swal.fire({
+            title: 'Could not save!',
+            text: 'Something went wrong, please try again.',
+            icon: 'error',
+            background: '#161a22',
+            color: '#fff',
+            timer: 2500,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top'
+        });
+        window.history.replaceState(null, null, window.location.pathname);
     }else if (error === 'unauthorised') {
         Swal.fire({
             title: 'Unauthorised!',

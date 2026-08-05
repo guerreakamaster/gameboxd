@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 1. Check for SweetAlert messages in the URL 
     const urlParams = new URLSearchParams(window.location.search);
     const msg = urlParams.get('msg');
-    
+    const error = urlParams.get('error');
+
     if (msg === 'loggedin') {
         Swal.fire({
             title: 'Welcome Back!',
@@ -41,6 +42,19 @@ document.addEventListener("DOMContentLoaded", async () => {
             timer: 2500, 
             showConfirmButton: false, 
             toast: true, 
+            position: 'top'
+        });
+        window.history.replaceState(null, null, window.location.pathname);
+    } else if (error === 'save_failed') {
+        Swal.fire({
+            title: 'Could not save!',
+            text: 'Something went wrong with your review, please try again.',
+            icon: 'error',
+            background: '#161a22',
+            color: '#fff',
+            timer: 2500,
+            showConfirmButton: false,
+            toast: true,
             position: 'top'
         });
         window.history.replaceState(null, null, window.location.pathname);

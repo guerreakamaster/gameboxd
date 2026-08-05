@@ -73,5 +73,9 @@ if ($type === 'game') {
             </form>
         </div>
     </div>
+
+    <!--Sweet alert 2 widget-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../api/admin.js"></script>
 </body>
 </html>
