@@ -27,15 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_POST['a
     
 
     $title = $_POST['title'];
-    $year = $_POST['year'];
+    $release_year = $_POST['release_year'];
     $genre = $_POST['genre'];
     $developer = $_POST['developer'];
     $image_url = $_POST['image_url'];
 
     // Insert into the games table
-    $stmt = $conn->prepare("INSERT INTO games (title, YEAR, genre, developer, image_url) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO games (title, release_year, genre, developer, image_url) VALUES (?, ?, ?, ?, ?)");
     // "siiss" means: String, Integer, String, String, String
-    $stmt->bind_param("sisss", $title, $year, $genre, $developer, $image_url);
+    $stmt->bind_param("sisss", $title, $release_year, $genre, $developer, $image_url);
 
     if ($stmt->execute()) {
         header("Location: ../web/index.php?msg=game_added");
@@ -50,14 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_POST['a
 else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'game' && isset($_POST['action']) && $_POST['action'] === 'update') {
 
     $title = $_POST['title'];
-    $year = $_POST['year'];
+    $release_year = $_POST['release_year'];
     $genre = $_POST['genre'];
     $developer = $_POST['developer'];
     $image_url = $_POST['image_url'];
 
-    $stmt = $conn->prepare("UPDATE games SET title=?, YEAR=?, genre=?, developer=?, image_url=? WHERE id=?");
+    $stmt = $conn->prepare("UPDATE games SET title=?, release_year=?, genre=?, developer=?, image_url=? WHERE id=?");
 
-    $stmt->bind_param("sisssi", $title, $year, $genre, $developer, $image_url, $id);
+    $stmt->bind_param("sisssi", $title, $release_year, $genre, $developer, $image_url, $id);
     
     if ($stmt->execute()) {
         header("Location: ../web/index.php?msg=game_updated");
