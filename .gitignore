@@ -1,0 +1,2 @@
+# Local-only database seed containing development credentials.
+sql/02_seed_users.sql

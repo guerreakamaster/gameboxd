@@ -1,4 +1,10 @@
-INSERT INTO games (title, YEAR, genre, developer, image_url) VALUES 
+/*
+This SQL script seeds the database with initial data for the GameBoxd application.
+*/
+
+USE gameboxd;
+
+INSERT INTO games (title, release_year, genre, developer, image_url) VALUES
 ('The Legend of Zelda: Breath of the Wild', 2017, 'Action-Adventure', 'Nintendo', 'https://placehold.co/160x240/1a1a1a/ffffff?text=Breath+of\nthe+Wild'),
 ('Red Dead Redemption 2', 2018, 'Action-Adventure', 'Rockstar Games', 'https://placehold.co/160x240/1a1a1a/ffffff?text=Red+Dead\nRedemption+2'),
 ('Hollow Knight', 2017, 'Metroidvania', 'Team Cherry', 'https://placehold.co/160x240/1a1a1a/ffffff?text=Hollow+Knight'),
