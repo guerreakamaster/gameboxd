@@ -6,7 +6,7 @@
         
         <?php if(isset($_SESSION['username'])): ?>
             <!-- if logged in: show my profile and logout -->
-            <li><a href="profile.php">My Profile (<?php echo $_SESSION['username']; ?>)</a></li>
+            <li><a href="profile.php">My Profile (<<?php echo htmlspecialchars($_SESSION['username']); ?>)</a></li>
             <?php 
     // THE SECRET ADMIN DOOR
         if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): 

@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }else if (error === 'unauthorised') {
         Swal.fire({
             title: 'Unauthorised!',
-            text: 'You do not have permission to access that, rat!',
+            text: 'You do not have permission to access that!',
             icon: 'error',
             background: '#161a22', //matching colors with the page theme
             color: '#fff',

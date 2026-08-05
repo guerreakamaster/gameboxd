@@ -8,7 +8,8 @@ delete -> deletes the game[id] from the database
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    die("Unauthorized access.");
+    header("Location: ../web/login.php?msg=login_required");
+    exit;
 }
 
 require_once __DIR__ . '/db.php';

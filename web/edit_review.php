@@ -2,7 +2,7 @@
 session_start();
 
 // SECURITY GUARD: if not logged in - kick guest
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: index.php?error=unauthorised");
     exit;
 }
@@ -13,6 +13,10 @@ require_once __DIR__ . '/../api/db.php';
 
 $type = $_GET['type'] ?? '';
 $id = $_GET['id'] ?? 0;
+
+if ($type !== 'review') { 
+    header('Location: profile.php');
+}
 
 // ON FIRST LOAD: Get the current review details to fill the form
 if ($type === 'review') {
