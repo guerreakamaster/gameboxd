@@ -28,6 +28,12 @@ $stmt->execute();
 $result = $stmt->get_result();
 $row = $result -> fetch_assoc();
 
+if ($row === null) {
+    // The catalogue is public, so being specific here leaks nothing.
+    header("Location: index.php?error=game_not_found");
+    exit;
+}
+
 ?>
 
 
