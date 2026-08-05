@@ -2,10 +2,11 @@
 session_start();
 
 // SECURITY GUARD: if not logged in - kick guest
-if (!isset($_SESSION['role'])) {
+if (!isset($_SESSION['user'])) {
     header("Location: index.php?error=unauthorised");
     exit;
 }
+$user_id = $_SESSION['user_id'];
 
 require_once __DIR__ . '/../api/db.php';
 
@@ -15,31 +16,23 @@ $id = $_GET['id'] ?? 0;
 
 // ON FIRST LOAD: Get the current review details to fill the form
 if ($type === 'review') {
-    $stmt = $conn->prepare("SELECT * FROM reviews WHERE id = ?");
-    $stmt->bind_param("i", $id);
+    $stmt = $conn->prepare("SELECT * FROM reviews WHERE id = ? AND user_id = ?");
+    $stmt->bind_param("ii", $id, $user_id);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $reviewData = $result->fetch_assoc();
+    $reviewData = $stmt->get_result()->fetch_assoc();
     $stmt->close();
-    
-        
-    // Not ours.
-    if ($result->num_rows === 0) {
-    header("Location: profile.php?error=not_allowed");
-    exit;
-}
+
+    // Doesn't exist, or isn't ours. Same answer either way.
+    if ($reviewData === null) {
+        header("Location: profile.php?error=not_allowed");
+        exit;
+    }
 }
 //get game title via review.game_id
 $stmt = $conn->prepare("SELECT title from games where id = ?");
 $stmt -> bind_param("i", $reviewData['game_id']);
 $stmt -> execute();
 $result = $stmt->get_result();
-
-// Not ours.
-    if ($result->num_rows === 0) {
-    header("Location: profile.php?error=not_allowed");
-    exit;
-    }
 $game_title = $result->fetch_assoc();
 $stmt->close();
 
