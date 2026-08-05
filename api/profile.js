@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    
+
     // 1. Check for SweetAlert messages in the URL 
     const urlParams = new URLSearchParams(window.location.search);
     const msg = urlParams.get('msg');
@@ -19,29 +19,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         // Clean the URL so it doesn't trigger again on refresh
         window.history.replaceState(null, null, window.location.pathname);
-    }else if (msg === 'review_deleted') {
+    } else if (msg === 'review_deleted') {
         Swal.fire({
-            title: 'Deleted!', 
-            text: 'Your review has been removed successfully.', 
+            title: 'Deleted!',
+            text: 'Your review has been removed successfully.',
             icon: 'info',
-            background: '#161a22', 
-            color: '#fff', 
-            timer: 2500, 
-            showConfirmButton: false, 
-            toast: true, 
+            background: '#161a22',
+            color: '#fff',
+            timer: 2500,
+            showConfirmButton: false,
+            toast: true,
             position: 'top' // Matches your index.js positioning
         });
         window.history.replaceState(null, null, window.location.pathname);
     } else if (msg === 'review_updated') {
         Swal.fire({
-            title: 'Updated!', 
-            text: 'Your review has been updated successfully.', 
+            title: 'Updated!',
+            text: 'Your review has been updated successfully.',
             icon: 'success',
-            background: '#161a22', 
-            color: '#fff', 
-            timer: 2500, 
-            showConfirmButton: false, 
-            toast: true, 
+            background: '#161a22',
+            color: '#fff',
+            timer: 2500,
+            showConfirmButton: false,
+            toast: true,
             position: 'top'
         });
         window.history.replaceState(null, null, window.location.pathname);
@@ -49,6 +49,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         Swal.fire({
             title: 'Could not save!',
             text: 'Something went wrong with your review, please try again.',
+            icon: 'error',
+            background: '#161a22',
+            color: '#fff',
+            timer: 2500,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top'
+        });
+        window.history.replaceState(null, null, window.location.pathname);
+    } else if (error === 'not_allowed') {
+        Swal.fire({
+            title: 'Not yours!',
+            text: "That review doesn't belong to you, or doesn't exist.",
             icon: 'error',
             background: '#161a22',
             color: '#fff',
@@ -66,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         const res = await fetch("../api/load_profile_reviews.php");
         if (!res.ok) throw new Error("HTTP error " + res.status);
-        
+
         const reviews = await res.json();
 
         // If they have no games, show a friendly message
@@ -78,9 +91,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Loop through the data and build the HTML cards
         resultsDiv.innerHTML = reviews.map(r => {
             const imageUrl = r.image_url ? r.image_url : 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original';
-            
+
             const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-            
+
             let shortText = r.rating_text ? r.rating_text.substring(0, 50) : "";
             if (r.rating_text && r.rating_text.length > 50) shortText += "...";
 

@@ -22,16 +22,24 @@ if ($type === 'review') {
     $reviewData = $result->fetch_assoc();
     $stmt->close();
     
-    
-
-    // If the review doesn't exist, kick them out
-    if (!$reviewData) { header("Location: index.php"); exit; }
+        
+    // Not ours.
+    if ($result->num_rows === 0) {
+    header("Location: profile.php?error=not_allowed");
+    exit;
+}
 }
 //get game title via review.game_id
 $stmt = $conn->prepare("SELECT title from games where id = ?");
 $stmt -> bind_param("i", $reviewData['game_id']);
 $stmt -> execute();
 $result = $stmt->get_result();
+
+// Not ours.
+    if ($result->num_rows === 0) {
+    header("Location: profile.php?error=not_allowed");
+    exit;
+    }
 $game_title = $result->fetch_assoc();
 $stmt->close();
 

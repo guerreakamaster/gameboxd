@@ -123,6 +123,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         // Clean the URL so it doesn't trigger again on refresh
         window.history.replaceState(null, null, window.location.pathname);
+    }else if (error === 'game_not_found') {
+        Swal.fire({
+            title: 'Game not Found!',
+            text: 'The game you are trying to review does not exist in Gameboxd.',
+            icon: 'error',
+            background: '#161a22', //matching colors with the page theme
+            color: '#fff',
+            timer: 2500, // disappears automatically after 2.5 seconds
+            showConfirmButton: false,
+            toast: true, //makes it small and sleek
+            position: 'top' // position = top right
+        });
+        // Clean the URL so it doesn't trigger again on refresh
+        window.history.replaceState(null, null, window.location.pathname);
     }
 
     //render games into the list

@@ -13,9 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once __DIR__ . '/db.php';
 
-
-$conn = new mysqli($host, $user, $password, $database);
-if ($conn->connect_error) die("Database connection failed.");
+$user_id = $_SESSION['user_id'];
 
 $type = $_GET['type'] ?? '';
 $id = $_GET['id'] ?? 0;
@@ -119,20 +117,29 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review' && isset($_
 
 
 // UPDATE REVIEW
-else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review'&& isset($_POST['action']) && $_POST['action'] === 'update') {
+else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review' && isset($_POST['action']) && $_POST['action'] === 'update') {
     $rating = $_POST['rating'];
     $played_hours = $_POST['played_hours'];
     $rating_text = $_POST['rating_text'];
 
-    $stmt = $conn->prepare("UPDATE reviews SET rating=?, played_hours=?, rating_text=? WHERE id=?");
-    // "sisssi" = String, Int, String, String, String, Int (the ID)
-    $stmt->bind_param("iisi", $rating, $played_hours, $rating_text, $id);
-    
+    $stmt = $conn->prepare("UPDATE reviews SET rating=?, played_hours=?, rating_text=? WHERE id=? AND user_id=?");
+    // "iisii" = Int,Int,String,Int,Int
+    $stmt->bind_param("iisii", $rating, $played_hours, $rating_text, $id, $user_id);
+
     try {
         $stmt->execute();
+
+        // The query ran fine. Now: did it match anything?
+        if ($stmt->affected_rows === 0) {
+            // The review doesn't exist, or it isn't ours. Same answer either way
+            header("Location: ../web/profile.php?error=not_allowed");
+            exit;
+        }
+
         header("Location: ../web/profile.php?msg=review_updated");
         exit;
     } catch (mysqli_sql_exception $e) {
+        // Something actually went wrong
         header("Location: ../web/profile.php?error=save_failed");
         exit;
     }
@@ -140,15 +147,22 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review'&& isset($_P
 
 
 // DELETE REVIEW
-else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review' && isset($_POST['action']) && $_POST['action'] === 'delete') { 
-    $stmt = $conn->prepare("DELETE FROM reviews WHERE id = ?");
-    $stmt -> bind_param("i", $id);
+else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type === 'review' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+    $stmt = $conn->prepare("DELETE FROM reviews WHERE id = ? AND user_id=?");
+    $stmt->bind_param("ii", $id, $user_id);
 
     try {
         $stmt->execute();
+
+        if ($stmt->affected_rows === 0) {
+            header("Location: ../web/profile.php?error=not_allowed");
+            exit;
+        }
+
         header("Location: ../web/profile.php?msg=review_deleted");
         exit;
     } catch (mysqli_sql_exception $e) {
+        // Something actually went wrong
         header("Location: ../web/profile.php?error=save_failed");
         exit;
     }
